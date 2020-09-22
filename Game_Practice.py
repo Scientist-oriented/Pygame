@@ -76,8 +76,6 @@ running = "opening"
 
 while True:
     while running == "opening":
-        screen.blit(opening, (0,0))
-        pygame.display.update()
         dt = clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -102,6 +100,8 @@ while True:
                     charactor_y_pos = screen_height - chraractor_height
 
                     to_x = 0
+        screen.blit(opening, (0,0))
+        pygame.display.update()
 
     while running == "ongame":
         dt = clock.tick(30)
@@ -168,12 +168,15 @@ while True:
 
         if charactor_rect.colliderect(enemy1_rect):
             running = "gameover"
+            end_ticks = pygame.time.get_ticks()
 
         if charactor_rect.colliderect(enemy2_rect):
             running = "gameover"
+            end_ticks = pygame.time.get_ticks()
 
         if charactor_rect.colliderect(enemy3_rect):
             running = "gameover"
+            end_ticks = pygame.time.get_ticks()
 
         # 적 이동
 
@@ -225,6 +228,7 @@ while True:
 
     # 게임이 꺼지기 전에 게임오버 화면 보여주기
     while running == "gameover":
+        dt = clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -234,6 +238,9 @@ while True:
                     start_ticks = pygame.time.get_ticks()
                     running = "opening"
 
-        dt = clock.tick(30)
+        score_time = (end_ticks - start_ticks) / 1000
+        score = game_font.render(str(round(score_time, 2)), True, (0, 0, 0))
+
         screen.blit(gameover, (0,0))
+        screen.blit(score, (10, 10))
         pygame.display.update()
